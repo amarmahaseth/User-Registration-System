@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Secure user registration with password strength validation and CAPTCHA verification">
+    <title>User Registration</title>
+    <style>
+        /* Critical CSS to prevent FOUC */
+        body { 
+            margin: 0; 
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 15px;
+            background-color: #f5f6fa;
+        }
+        .container { 
+            width: 100%; 
+            max-width: 450px; 
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Create Account</h1>
+        <form id="registrationForm" action="register.php" method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required 
+                       minlength="3" maxlength="20" 
+                       pattern="[a-zA-Z0-9_-]+" 
+                       title="Username can only contain letters, numbers, underscores, and hyphens">
+                <div class="form-text">3-20 characters, letters, numbers, _ or -</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required 
+                       minlength="8" 
+                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z\d]).{8,}"
+                       title="Password must be at least 8 characters long and include uppercase, lowercase, number and special character">
+                <div id="passwordStrength"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <div id="passwordMatch"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="captcha">Solve the Problem</label>
+                <div class="captcha-box" id="captchaImage"></div>
+                <input type="text" id="captcha" name="captcha" required 
+                       pattern="[0-9]+" 
+                       title="Please enter the correct answer">
+                <input type="hidden" name="stored_captcha" id="storedCaptcha">
+                <div class="form-text">Enter the answer to the math problem</div>
+            </div>
+
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <!-- Dialog Box for Messages -->
+    <div id="messageDialog" class="dialog">
+        <div class="dialog-content">
+            <div class="dialog-header">
+                <h3 id="dialogTitle">Message</h3>
+                <button class="close-dialog">&times;</button>
+            </div>
+            <div class="dialog-body">
+                <p id="dialogMessage"></p>
+            </div>
+            <div class="dialog-footer">
+                <button id="dialogButton" class="dialog-button">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
